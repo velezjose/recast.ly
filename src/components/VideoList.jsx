@@ -1,19 +1,20 @@
-import VideoListEntry from './VideoListEntry.jsx';
+import VideoListEntry from './VideoListEntry.js';
+// import exampleVideoData from '../data/exampleVideoData.js';
 
-var VideoList = (props) => (
-  <div className="video-list">
-    {props.videos.map(video =>
+var VideoList = ({videos}) => {
+  VideoList.videos = videos;
+  return (<div className="video-list">
+    {videos.map(video =>
       <VideoListEntry video={video} />
     )}  
-  </div>
-);
+  </div>);
+};
 
 // PropTypes tell other developers what `props` a component expects
 // Warnings will be shown in the console when the defined rules are violated
 VideoList.propTypes = {
   videos: React.PropTypes.array.isRequired
 };
-
 
 
 //  <div><h5><em>videoListEntry</em> view goes here</h5></div>
