@@ -7,6 +7,7 @@ import YOUTUBE_API_KEY from '../config/youtube.js';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    
     this.state = {
       video: this.props.props[0], 
       videos: this.props.props,
@@ -39,6 +40,11 @@ class App extends React.Component {
   //   return options;
   // }
   
+  onclick() {
+    console.log('click');
+  }
+  
+  
   render() {
     this.setChildrenStates();
     // var options;
@@ -61,7 +67,7 @@ class App extends React.Component {
             <VideoPlayer video={VideoPlayer.video} />
           </div>
           <div className="col-md-5">
-            <VideoList videos={VideoList.videos} />
+            <VideoList videos={VideoList.videos} onclick={this.onclick.bind(this)} />
           </div>
         </div>
       </div>
