@@ -1,11 +1,11 @@
 import VideoListEntry from './VideoListEntry.js';
 // import exampleVideoData from '../data/exampleVideoData.js';
 
-var VideoList = ({videos, onclick}) => {
+var VideoList = ({videos, onVideoListEntryClick}) => {
   VideoList.videos = videos;
   return (<div className="video-list">
     {videos.map(video =>
-      <VideoListEntry video={video} onclick={onclick.bind(this)}/>
+      <VideoListEntry video={video} onVideoListEntryClick={onVideoListEntryClick}/>
     )}  
   </div>);
 };

@@ -2,6 +2,7 @@ import VideoPlayer from './VideoPlayer.js';
 import VideoList from './VideoList.js';
 import Search from './Search.js';
 import exampleVideoData from '../data/exampleVideoData.js';
+import searchYouTube from '../lib/searchYouTube.js';
 import YOUTUBE_API_KEY from '../config/youtube.js';
 
 class App extends React.Component {
@@ -9,12 +10,10 @@ class App extends React.Component {
     super(props);
     
     this.state = {
-      video: this.props.props[0], 
-      videos: this.props.props,
-      // clicked: false
-    };
-    
-    // this.setChildrenStates();
+      video: exampleVideoData[0], 
+      videos: exampleVideoData,
+      input: '',
+    };  
   }
   
   setChildrenStates() {
@@ -23,43 +22,50 @@ class App extends React.Component {
     
   }
   
-  // onSearchButtonClick() {
-  //   this.state.clicked = !this.clicked.state;
-  // }
-  
-  // searchYouTube() {
-  //   var $text = $('input').val();
-  //   $('input').val('');
-    
-  //   var options = {
-  //     query: $text,
-  //     max: 5,
-  //     key: YOUTUBE_API_KEY
-  //   };
-    
-  //   return options;
-  // }
-  
-  onclick() {
-    console.log('click');
+  searchButtonClick() {
+    this.handleYouTube(this.state.input);
   }
   
+  handleYouTube(query) {
+    var options = {
+      query: query,
+      max: 5,
+      key: YOUTUBE_API_KEY
+    };
+
+    this.props.searchYouTube(options, (data) => this.setState({
+      video: data.items[0],
+      videos: data.items,
+      input: ''
+    }));
+  }
+  
+  componentDidMount() {
+    this.handleYouTube('dog');
+  }
+  
+  getSearchInput(event) {
+    this.setState({
+      input: event.target.value
+    });
+    console.log(event.target.value);
+    return event.target.value;
+  }
+  
+  onVideoListEntryClick(video) {
+    this.setState({
+      video: video
+    }); 
+  }
   
   render() {
     this.setChildrenStates();
-    // var options;
-    
-    // if (this.state.clicked) {
-    //   debugger;
-    //   options = this.searchYouTube();
-    //   this.state.clicked = false;      
-    // }
-    
+
     return (  
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search />
+            <Search value={this.state.input} searchButtonClick={this.searchButtonClick.bind(this)} getSearchInput={this.getSearchInput.bind(this)} />
           </div>
         </nav>
         <div className="row">
@@ -67,7 +73,7 @@ class App extends React.Component {
             <VideoPlayer video={VideoPlayer.video} />
           </div>
           <div className="col-md-5">
-            <VideoList videos={VideoList.videos} onclick={this.onclick.bind(this)} />
+            <VideoList videos={VideoList.videos} onVideoListEntryClick={this.onVideoListEntryClick.bind(this)} />
           </div>
         </div>
       </div>
@@ -76,9 +82,6 @@ class App extends React.Component {
   
 
 }
-
-//             <VideoPlayer props={this.props[0]} />
-
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
 // `var` declarations will only exist globally where explicitly defined
